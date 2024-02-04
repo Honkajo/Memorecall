@@ -1,0 +1,25 @@
+{% if session.username %}
+<p>Welcome {{ session.username }}</p>
+<a href="/logout">Log out</a>
+{% else %}
+<h2>Login</h2>
+<form action="/" method="POST">
+    <input type="hidden" name="login" value="true">
+    <p>Username:<br>
+    <input type="text" name="username"></p>
+    <p>Pawwsord:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Kirjaudu">
+</form>
+
+<h2>Register</h2>
+<form action="/" method="POST">
+    <input type="hidden" name="register" value="true">
+    <p>Username:<br>
+    <input type="text" name="username" required></p>
+    <p>Password:<br>
+    <input type="password" name="password" required></p>
+    <input type="submit" value="Rekisteröidy">
+</form>
+{% endif %}
+
