@@ -4,6 +4,6 @@ User can run the app and see the starting window with login and register forms.(
 
 # **How to use**
 
-Inside app directory use command "source venv/bin/activate" and then "flask run" to start application.
+Inside app directory use command "source venv/bin/activate" and then "flask run" to get the link to the application.
 
 
