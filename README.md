@@ -18,10 +18,10 @@ To start the application:
 ## Overview
 Memorecall is an app meant for students to learn more efficiently using flashcards and spaced repetition. Purpose is to use Leitner system to space cards so that the hardest cards are seen more to save time on learning.
 ### Current Features
-- **User can login into their account
-- **User can register their username and password
+- User can login into their account
+- User can register their username and password
 
 ### Future Enhancements
-- **User can learn cards from their decks
-- **User can create decks and add cards to the decks
-- **User can reset learning phases for deck to start over
+- User can learn cards from their decks
+- User can create decks and add cards to the decks
+- User can reset learning phases for deck to start over
