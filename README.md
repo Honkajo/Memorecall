@@ -1,9 +1,11 @@
-# **_Memorecall_**
+# Memorecall
 
-User can run the app and see the starting window with login and register forms.(Database not working yet)
-
-# **How to use**
-
-Inside app directory use command "source venv/bin/activate" and then "flask run" to get the link to the application.
-
-
+## Getting Started
+## Overview
+Memorecall is an app meant for students to learn more efficiently using flashcards and spaced repetition. Purpose is to use Leitner system to space cards so that the hardest cards are seen more to save time on learning.
+### Current Features
+### Future Enhancements
+- **User can create decks and add cards to the decks
+- **User can reset learning phases for deck to start over
+- **User can login into their account
+- **User can register their username and password
