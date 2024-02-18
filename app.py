@@ -46,6 +46,8 @@ def register():
         hash_value = generate_password_hash(password)
         db.session.execute(text("INSERT INTO users (username, password) VALUES (:username, :hash_value)"), {"username": username, "hash_value": hash_value})
         db.session.commit()
-        return redirect("/login")
+        return redirect("/")
     else:
         return render_template("register.html")
+
+
