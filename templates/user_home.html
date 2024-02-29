@@ -6,7 +6,15 @@
     <title>User Home</title>
 </head>
 <body>
-    <p>You are signed in {{ session.username }}</p>
-    <a href="/logout">Log out</a>
+    <h2>Welcome, {{ session.username }}!</h2>
+    <div style="text-align: center;">
+        <form action="/logout" method="GET" style="display: inline-block;">
+            <input type="submit" value="Log out" style="width: 150px;">
+        </form>
+        <br>
+        <form action="/create_deck" method="GET" style="display: inline-block;">
+            <input type="submit" value="Create deck" style="width: 150px;">
+        </form>
+    </div>
 </body>
 </html>
