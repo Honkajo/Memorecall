@@ -17,5 +17,13 @@ CREATE TABLE flashcards (
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
     level INTEGER NOT NULL DEFAULT 1,
-    FOREIGN KEY (deck_id) REFERENCES deck (id)
+    FOREIGN KEY (deck_id) REFERENCES decks (id)
+);
+
+CREATE TABLE user_decks (
+    user_id INTEGER NOT NULL, 
+    deck_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, deck_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (deck_id) REFERENCES decks (id)
 );
