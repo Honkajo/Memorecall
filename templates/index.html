@@ -6,23 +6,17 @@
     <title>Login</title>
 </head>
 <body>
-    {% if session.username %}
-        <p>You are signed in {{ session.username }}</p>
-        <a href="/logout">Log out</a>
-    {% else %}
-        <h2>Login</h2>
-        <form action="/login" method="POST">
-            <p>Username:<br>
-            <input type="text" name="username" required></p>
-            <p>Password:<br>
-            <input type="password" name="password" required></p>
-            <input type="submit" value="Login">
-        </form>
-        <form action="/register" method="GET">
-            <input type="submit" value="Register">
-        </form>
-    {% endif %}
-    
+    <h2>Login</h2>
+    <form action="/login" method="POST">
+        <p>Username:<br>
+        <input type="text" name="username" required></p>
+        <p>Password:<br>
+        <input type="password" name="password" required></p>
+        <input type="submit" value="Login">
+    </form>
+    <form action="/register" method="GET">
+        <input type="submit" value="Register">
+    </form>
 </body>
 </html>
 
