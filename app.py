@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from os import getenv
+from sqlalchemy import exc
 
 load_dotenv()
 
@@ -24,6 +25,7 @@ def login():
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
     if user and check_password_hash(user.password, password):
+        session["user_id"] = user.id
         session["username"] = username
         return redirect("/user")
     else:
@@ -55,10 +57,17 @@ def create_deck():
         user_id = session.get("user_id")
         if not deck_name:
             return "Deck name is required", 400
-        sql = text("INSERT INTO decks (user_id, name) VALUES (:user_id, :name)")
-        db.session.execute(sql, {"user_id": user_id, "name": deck_name})
-        db.session.commit()
-        return redirect("/")
+        try:
+            sql = text("INSERT INTO decks (user_id, name) VALUES (:user_id, :name)")
+            db.session.execute(sql, {"user_id": user_id, "name": deck_name})
+            db.session.commit()
+            print("Deck created successfully")
+            return redirect("/user")
+        except exc.SQLAlchemyError as e:
+            print("Database error:", e)
+            db.session.rollback()
+            return "Internal Server Error", 500
+    return render_template("create_deck.html")
 
 @app.route("/user")
 def user_home():
