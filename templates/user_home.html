@@ -16,5 +16,13 @@
             <input type="submit" value="Create deck" style="width: 150px;">
         </form>
     </div>
+    <div>
+        <h3>Your Decks:</h3>
+        <ul>
+            {% for deck in user_decks %}
+                <li><a href="/deck/{{ deck.id }}">{{ deck.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
