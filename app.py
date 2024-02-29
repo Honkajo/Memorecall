@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
@@ -25,9 +25,8 @@ def login():
     user = result.fetchone()
     if user and check_password_hash(user.password, password):
         session["username"] = username
-        return redirect("/")
+        return redirect("/user")
     else:
-        #handling login failure
         return redirect("/login")
 
 @app.route("/logout")
@@ -49,5 +48,21 @@ def register():
         return redirect("/")
     else:
         return render_template("register.html")
+@app.route("/create_deck", methods=["GET", "POST"])
+def create_deck():
+    if request.method == "POST":
+        deck_name = request.form["name"]
+        user_id = session.get("user_id")
+        if not deck_name:
+            return "Deck name is required", 400
+        sql = text("INSERT INTO decks (user_id, name) VALUES (:user_id, :name)")
+        db.session.execute(sql, {"user_id": user_id, "name": deck_name})
+        db.session.commit()
+        return redirect("/")
+
+@app.route("/user")
+def user_home():
+    return render_template("user_home.html")
+
 
 
