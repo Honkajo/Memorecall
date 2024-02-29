@@ -71,7 +71,14 @@ def create_deck():
 
 @app.route("/user")
 def user_home():
-    return render_template("user_home.html")
+    user_decks = get_user_decks(session["user_id"])
+    return render_template("user_home.html", user_decks=user_decks)
+
+def get_user_decks(user_id):
+    sql = text("SELECT id, name FROM decks WHERE user_id = :user_id")
+    result = db.session.execute(sql, {"user_id": user_id})
+    decks = result.fetchall()
+    return decks
 
 
 
