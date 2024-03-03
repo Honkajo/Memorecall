@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
@@ -104,3 +104,52 @@ def deck_home(deck_id):
     result = db.session.execute(sql, {"deck_id": deck_id})
     flashcards = result.fetchall()
     return render_template("deck_home.html", flashcards=flashcards, deck_id=deck_id)
+
+@app.route("/learn/<int:deck_id>")
+def learn(deck_id):
+    sql = text("SELECT id, question FROM flashcards WHERE deck_id = :deck_id AND level = 1 ORDER BY id LIMIT 1")
+    result = db.session.execute(sql, {"deck_id": deck_id})
+    card = result.fetchone()
+    if card:
+        session["current_deck_id"] = deck_id
+        return redirect(url_for("show_question", card_id=card.id))
+    else:
+        return "No level 1 cards in deck", 400
+    
+@app.route("/card/<int:card_id>/question")
+def show_question(card_id):
+    sql = text("SELECT question FROM flashcards WHERE id = :card_id")
+    result = db.session.execute(sql, {"card_id": card_id})
+    card = result.fetchone()
+    return render_template("show_question.html", card=card, card_id=card_id)
+
+@app.route("/card/<int:card_id>/answer")
+def show_answer(card_id):
+    sql = text("SELECT question, answer FROM flashcards WHERE id = :card_id")
+    result = db.session.execute(sql, {"card_id": card_id})
+    card = result.fetchone()
+    return render_template("show_answer.html", card=card, card_id=card_id)
+
+@app.route("/card/<int:card_id>/good")
+def increase_card_level(card_id):
+    try:
+        sql = text("UPDATE flashcards SET level = level + 1 WHERE id = :card_id")
+        db.session.execute(sql, {"card_id": card_id})
+        db.session.commit()
+
+        next_card_sql = text("SELECT id FROM flashcards WHERE deck_id = :deck_id AND level = 1 AND id > :card_id ORDER BY id ASC LIMIT 1")
+        next_card_result = db.session.execute(next_card_sql, {"deck_id": session["current_deck_id"], "card_id": card_id})
+        next_card = next_card_result.fetchone()
+
+        if next_card:
+            return redirect(url_for("show_question", card_id=next_card.id))
+        else:
+            return redirect(url_for("deck_home", deck_id=session["current_deck_id"]))
+    except exc.SQLAlchemy as e:
+        print(e)
+        db.session.rollback()
+        return "Internal Server Error", 500
+    
+@app.route("/card/<int:card_id>/again")
+def show_question_again(card_id):
+    return redirect(url_for("show_question", card_id=card_id))
