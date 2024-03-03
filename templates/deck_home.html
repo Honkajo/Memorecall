@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Home</title>
+</head>
+<body>
+    <h2>Flashcards</h2>
+    <table>
+        <tr>
+            <th>Question</th>
+            <th>Answer</th>
+        </tr>
+        {% for flashcard in flashcards %}
+        <tr>
+            <td>{{ flashcard.question }}</td>
+            <td>{{ flashcard.answer }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/deck/{{ deck_id }}/add_flashcard">Add Flashcard</a>
+    <br><a href="/user"><button>Return to Home</button></a>
+</body>
+</html>
