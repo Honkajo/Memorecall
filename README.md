@@ -20,8 +20,14 @@ Memorecall is an app meant for students to learn more efficiently using flashcar
 ### Current Features
 - User can login into their account
 - User can register their username and password
+- User can create decks and add cards to the decks
+- User can see the listing of the decks in the inventory
+- User can learn cards from their decks
 
 ### Future Enhancements
-- User can learn cards from their decks
-- User can create decks and add cards to the decks
-- User can reset learning phases for deck to start over
+- User can reset learning phases for the deck to start over
+- When cards get to level 6 they do not show in the learning phases anymore
+- Users can delete cards and deck from their inventory
+
+### Usage problems
+If schema.sql file does not correctly create all the tables, create them manually by using psql command and psql your_database_name < schema.sql
