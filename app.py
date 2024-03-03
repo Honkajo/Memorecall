@@ -80,5 +80,54 @@ def get_user_decks(user_id):
     decks = result.fetchall()
     return decks
 
+@app.route("/deck/<int:deck_id>")
+def deck(deck_id):
+    deck_sql = text("SELECT name FROM decks WHERE id = :deck_id")
+    deck_result = db.session.execute(deck_sql, {"deck_id": deck_id})
+    deck_row = deck_result.fetchone()
 
+    if not deck_row:
+        return "Deck not found", 404
+    
+    deck_name = deck_row[0]
 
+    flashcards_sql = text("SELECT question, answer FROM flashcards WHERE deck_id = :deck_id")
+    flashcards_result = db.session.execute(flashcards_sql, {"deck_id": deck_id})
+    flashcards = flashcards_result.fetchall()
+
+    return render_template("deck.html", deck_name=deck_name, flashcards=flashcards)
+
+@app.route("/add_flashcard/<int:deck_id>", methods=["POST"])
+def add_flashcard(deck_id):
+    print("Received deck_id:", deck_id)
+    if request.method == "POST":
+        question = request.form["question"]
+        answer = request.form["answer"]
+
+        try:
+            sql = text("INSERT INTO flashcards (deck_id, question, answer) VALUES (:deck_id, :question, :answer)")
+            db.session.execute(sql, {"deck_id": deck_id, "question": question, "answer": answer})
+            db.session.commit()
+            print("Flashcard added succesfully")
+            return redirect("/deck/{}".format(deck_id))
+        except exc.SQLAlchemyError as e:
+            print("Database error:", e)
+            db.session.rollback()
+            return "Internal Server Error", 500
+    else:
+        return redirect("/")
+    
+@app.route("/remove_flashcard/<int:flashcard_id>", methods=["POST"])
+def remove_flashcard(flashcard_id):
+    if request.method == "POST":
+        try:
+            sql = text("DELETE FROM flashcards WHERE id = :flashcard_id")
+            db.session.execute(sql, {"flashcard_id": flashcard_id})
+            db.session.commit()
+            print("Flashcard removed successfully")
+            return redirect(request.referrer)
+        except exc.SQLAlchemyError as e:
+            print("Database error:", e)
+            return "Internal Server Error", 500
+    else:
+        return redirect("/")
