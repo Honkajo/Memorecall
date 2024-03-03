@@ -30,4 +30,4 @@ Memorecall is an app meant for students to learn more efficiently using flashcar
 - Users can delete cards and deck from their inventory
 
 ### Usage problems
-If schema.sql file does not correctly create all the tables, create them manually by using '''plaintextpsql''' command and '''plaintextpsql your_database_name < schema.sql'''
+If schema.sql file does not correctly create all the tables, create them manually by using '''plaintext psql ''' command and '''plaintext psql your_database_name < schema.sql '''
